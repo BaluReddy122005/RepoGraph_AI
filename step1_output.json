@@ -1,0 +1,578 @@
+{
+  "file_path": "src/requests/auth.py",
+  "imports": [
+    {
+      "type": "from_import",
+      "module": "__future__",
+      "name": "annotations",
+      "alias": null,
+      "line": 8
+    },
+    {
+      "type": "import",
+      "module": "hashlib",
+      "alias": null,
+      "line": 10
+    },
+    {
+      "type": "import",
+      "module": "os",
+      "alias": null,
+      "line": 11
+    },
+    {
+      "type": "import",
+      "module": "re",
+      "alias": null,
+      "line": 12
+    },
+    {
+      "type": "import",
+      "module": "threading",
+      "alias": null,
+      "line": 13
+    },
+    {
+      "type": "import",
+      "module": "time",
+      "alias": null,
+      "line": 14
+    },
+    {
+      "type": "import",
+      "module": "warnings",
+      "alias": null,
+      "line": 15
+    },
+    {
+      "type": "from_import",
+      "module": "base64",
+      "name": "b64encode",
+      "alias": null,
+      "line": 16
+    },
+    {
+      "type": "from_import",
+      "module": "typing",
+      "name": "TYPE_CHECKING",
+      "alias": null,
+      "line": 17
+    },
+    {
+      "type": "from_import",
+      "module": "typing",
+      "name": "Any",
+      "alias": null,
+      "line": 17
+    },
+    {
+      "type": "from_import",
+      "module": "typing",
+      "name": "Final",
+      "alias": null,
+      "line": 17
+    },
+    {
+      "type": "from_import",
+      "module": "typing",
+      "name": "cast",
+      "alias": null,
+      "line": 17
+    },
+    {
+      "type": "from_import",
+      "module": "typing",
+      "name": "overload",
+      "alias": null,
+      "line": 17
+    },
+    {
+      "type": "from_import",
+      "module": "._internal_utils",
+      "name": "to_native_string",
+      "alias": null,
+      "line": 19
+    },
+    {
+      "type": "from_import",
+      "module": ".compat",
+      "name": "basestring",
+      "alias": null,
+      "line": 20
+    },
+    {
+      "type": "from_import",
+      "module": ".compat",
+      "name": "str",
+      "alias": null,
+      "line": 20
+    },
+    {
+      "type": "from_import",
+      "module": ".compat",
+      "name": "urlparse",
+      "alias": null,
+      "line": 20
+    },
+    {
+      "type": "from_import",
+      "module": ".cookies",
+      "name": "extract_cookies_to_jar",
+      "alias": null,
+      "line": 21
+    },
+    {
+      "type": "from_import",
+      "module": ".utils",
+      "name": "parse_dict_header",
+      "alias": null,
+      "line": 22
+    }
+  ],
+  "classes": [
+    {
+      "name": "AuthBase",
+      "bases": [],
+      "decorators": [],
+      "docstring": "Base class that all auth implementations derive from",
+      "line_start": 78,
+      "line_end": 82,
+      "methods": [
+        {
+          "name": "__call__",
+          "class_parent": "AuthBase",
+          "is_async": false,
+          "args": [
+            "self",
+            "r"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 81,
+          "line_end": 82,
+          "calls": [
+            "NotImplementedError"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HTTPBasicAuth",
+      "bases": [
+        "AuthBase"
+      ],
+      "decorators": [],
+      "docstring": "Attaches HTTP Basic Authentication to the given Request object.",
+      "line_start": 85,
+      "line_end": 113,
+      "methods": [
+        {
+          "name": "__init__",
+          "class_parent": "HTTPBasicAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "username",
+            "password"
+          ],
+          "decorators": [
+            "overload"
+          ],
+          "docstring": null,
+          "line_start": 92,
+          "line_end": 92,
+          "calls": []
+        },
+        {
+          "name": "__init__",
+          "class_parent": "HTTPBasicAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "username",
+            "password"
+          ],
+          "decorators": [
+            "overload"
+          ],
+          "docstring": null,
+          "line_start": 94,
+          "line_end": 94,
+          "calls": []
+        },
+        {
+          "name": "__init__",
+          "class_parent": "HTTPBasicAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "username",
+            "password"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 96,
+          "line_end": 98,
+          "calls": []
+        },
+        {
+          "name": "__eq__",
+          "class_parent": "HTTPBasicAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "other"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 100,
+          "line_end": 106,
+          "calls": [
+            "all",
+            "getattr",
+            "getattr"
+          ]
+        },
+        {
+          "name": "__ne__",
+          "class_parent": "HTTPBasicAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "other"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 108,
+          "line_end": 109,
+          "calls": []
+        },
+        {
+          "name": "__call__",
+          "class_parent": "HTTPBasicAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "r"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 111,
+          "line_end": 113,
+          "calls": [
+            "_basic_auth_str"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HTTPProxyAuth",
+      "bases": [
+        "HTTPBasicAuth"
+      ],
+      "decorators": [],
+      "docstring": "Attaches HTTP Proxy Authentication to a given Request object.",
+      "line_start": 116,
+      "line_end": 121,
+      "methods": [
+        {
+          "name": "__call__",
+          "class_parent": "HTTPProxyAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "r"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 119,
+          "line_end": 121,
+          "calls": [
+            "_basic_auth_str"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HTTPDigestAuth",
+      "bases": [
+        "AuthBase"
+      ],
+      "decorators": [],
+      "docstring": "Attaches HTTP Digest Authentication to the given Request object.",
+      "line_start": 124,
+      "line_end": 354,
+      "methods": [
+        {
+          "name": "__init__",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "username",
+            "password"
+          ],
+          "decorators": [
+            "overload"
+          ],
+          "docstring": null,
+          "line_start": 137,
+          "line_end": 137,
+          "calls": []
+        },
+        {
+          "name": "__init__",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "username",
+            "password"
+          ],
+          "decorators": [
+            "overload"
+          ],
+          "docstring": null,
+          "line_start": 139,
+          "line_end": 139,
+          "calls": []
+        },
+        {
+          "name": "__init__",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "username",
+            "password"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 141,
+          "line_end": 145,
+          "calls": [
+            "threading.local"
+          ]
+        },
+        {
+          "name": "init_per_thread_state",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 147,
+          "line_end": 155,
+          "calls": [
+            "hasattr"
+          ]
+        },
+        {
+          "name": "build_digest_header",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "method",
+            "url"
+          ],
+          "decorators": [],
+          "docstring": ":rtype: str",
+          "line_start": 157,
+          "line_end": 266,
+          "calls": [
+            "self._thread_local.chal.get",
+            "self._thread_local.chal.get",
+            "self._thread_local.chal.get",
+            "urlparse",
+            "hash_utf8",
+            "hash_utf8",
+            "str.encode",
+            "nonce.encode",
+            "time.ctime.encode",
+            "os.urandom",
+            "algorithm.upper",
+            "hash_utf8",
+            "hashlib.sha1.hexdigest",
+            "hash_utf8",
+            "KD",
+            "isinstance",
+            "hashlib.md5.hexdigest",
+            "str",
+            "time.ctime",
+            "KD",
+            "x.encode",
+            "isinstance",
+            "hashlib.sha1.hexdigest",
+            "hashlib.sha1",
+            "qop.split",
+            "hashlib.md5",
+            "x.encode",
+            "isinstance",
+            "hashlib.sha256.hexdigest",
+            "hashlib.sha1",
+            "x.encode",
+            "isinstance",
+            "hashlib.sha512.hexdigest",
+            "hashlib.sha256",
+            "x.encode",
+            "hashlib.sha512"
+          ]
+        },
+        {
+          "name": "handle_redirect",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "r",
+            "**kwargs"
+          ],
+          "decorators": [],
+          "docstring": "Reset num_401_calls counter on redirects.",
+          "line_start": 268,
+          "line_end": 271,
+          "calls": []
+        },
+        {
+          "name": "handle_401",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "r",
+            "**kwargs"
+          ],
+          "decorators": [],
+          "docstring": "Takes the given response and tries digest-auth, if needed.\n\n:rtype: requests.Response",
+          "line_start": 273,
+          "line_end": 319,
+          "calls": [
+            "r.headers.get",
+            "re.compile",
+            "parse_dict_header",
+            "r.close",
+            "r.request.copy",
+            "cast",
+            "extract_cookies_to_jar",
+            "prep.prepare_cookies",
+            "self.build_digest_header",
+            "r.connection.send",
+            "_r.history.append",
+            "seek",
+            "s_auth.lower",
+            "pat.sub",
+            "cast",
+            "cast",
+            "getattr"
+          ]
+        },
+        {
+          "name": "__call__",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "r"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 321,
+          "line_end": 343,
+          "calls": [
+            "self.init_per_thread_state",
+            "r.register_hook",
+            "r.register_hook",
+            "self.build_digest_header",
+            "tell",
+            "cast",
+            "cast",
+            "getattr"
+          ]
+        },
+        {
+          "name": "__eq__",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "other"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 345,
+          "line_end": 351,
+          "calls": [
+            "all",
+            "getattr",
+            "getattr"
+          ]
+        },
+        {
+          "name": "__ne__",
+          "class_parent": "HTTPDigestAuth",
+          "is_async": false,
+          "args": [
+            "self",
+            "other"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "line_start": 353,
+          "line_end": 354,
+          "calls": []
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "_basic_auth_str",
+      "class_parent": null,
+      "is_async": false,
+      "args": [
+        "username",
+        "password"
+      ],
+      "decorators": [],
+      "docstring": "Returns a Basic Auth string.",
+      "line_start": 34,
+      "line_end": 75,
+      "calls": [
+        "isinstance",
+        "isinstance",
+        "isinstance",
+        "warnings.warn",
+        "str",
+        "isinstance",
+        "warnings.warn",
+        "str",
+        "username.encode",
+        "password.encode",
+        "to_native_string",
+        "b64encode.strip",
+        "type",
+        "b64encode",
+        "b':'.join"
+      ]
+    }
+  ],
+  "config_constants": [
+    {
+      "name": "CONTENT_TYPE_FORM_URLENCODED",
+      "value": "application/x-www-form-urlencoded",
+      "line": 30
+    },
+    {
+      "name": "CONTENT_TYPE_MULTI_PART",
+      "value": "multipart/form-data",
+      "line": 31
+    }
+  ],
+  "route_decorators": [],
+  "notes": [
+    "psf/requests is an HTTP client library. It does not define web framework route decorators (@app.route, @router.get, etc.)."
+  ]
+}

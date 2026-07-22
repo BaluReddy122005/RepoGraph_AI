@@ -1,0 +1,18 @@
+# Python & Compiled Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js Dependencies
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# System & OS Artifacts
+._*
+.DS_Store
+Thumbs.db
+
+# Cloned Target Repository (reproduced via git clone instructions in README.md)
+target_repo/
