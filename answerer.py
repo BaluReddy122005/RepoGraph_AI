@@ -160,14 +160,28 @@ Provide your response in strict JSON format with answer (containing inline [file
     ) -> dict[str, Any]:
         """
         Deterministic, rule-based synthesis fallback when LLM API is unavailable.
-        Ensures strict citation rules and evidence checks.
+        Ensures strict citation rules, evidence quality checks, and out-of-scope detection.
         """
         nodes = retrieved_data.get("nodes", [])
-
-        # Check for unindexed out-of-scope topics (e.g. kafka, websocket, database, sql)
         q_lower = question.lower()
-        out_of_scope_keywords = ["kafka", "websocket", "database", "postgres", "sql", "graphql", "grpc"]
 
+        # ── Gate 1: No retrieved nodes at all ──
+        if not nodes:
+            reasoning_trace.append("No relevant nodes found in knowledge graph for this query.")
+            return {
+                "question": question,
+                "answer": "I don't know — no relevant code symbols were found in the `pallets/flask` repository for this query.",
+                "confidence": 0.0,
+                "confidence_justification": "Hybrid search returned zero matching nodes.",
+                "sources": [],
+                "reasoning_trace": reasoning_trace,
+            }
+
+        # ── Gate 2: Check for explicitly out-of-scope technology keywords ──
+        out_of_scope_keywords = [
+            "kafka", "websocket", "database", "postgres", "sql", "graphql", "grpc",
+            "redis", "mongodb", "kubernetes", "docker", "terraform", "aws", "firebase",
+        ]
         for kw in out_of_scope_keywords:
             if kw in q_lower:
                 reasoning_trace.append(f"Fallback check: Query mentions out-of-scope feature '{kw}' not in indexed codebase.")
@@ -180,7 +194,33 @@ Provide your response in strict JSON format with answer (containing inline [file
                     "reasoning_trace": reasoning_trace,
                 }
 
-        # Build grounded response from top retrieved nodes
+        # ── Gate 3: Check retrieval score quality ──
+        # If top seed scores are very low, the matches are irrelevant noise
+        top_score = nodes[0].get("retrieval_score", 0.0) if nodes else 0.0
+        avg_top3 = sum(n.get("retrieval_score", 0.0) for n in nodes[:3]) / max(1, len(nodes[:3]))
+
+        if top_score < 30.0:
+            reasoning_trace.append(
+                f"Quality gate: Top retrieval score ({top_score:.1f}) is below threshold (30.0). "
+                f"Matches are likely irrelevant noise — returning 'I don't know'."
+            )
+            return {
+                "question": question,
+                "answer": (
+                    "I don't know — this question does not appear to be about the `pallets/flask` codebase. "
+                    "The retrieval engine found no strongly relevant code symbols matching this query. "
+                    "RepoGraph AI can only answer questions about the indexed repository."
+                ),
+                "confidence": 0.0,
+                "confidence_justification": (
+                    f"Top retrieval score is {top_score:.1f} (threshold: 30.0). "
+                    f"No code symbols in the repository are relevant to this question."
+                ),
+                "sources": [],
+                "reasoning_trace": reasoning_trace,
+            }
+
+        # ── Build grounded response from relevant retrieved nodes ──
         sources = []
         answer_parts = [f"Based on repository analysis for '{question}':\n"]
 
@@ -205,17 +245,14 @@ Provide your response in strict JSON format with answer (containing inline [file
 
         answer_text = "\n".join(answer_parts).strip()
 
-        # Dynamic confidence score computation based on retrieval strength
-        top_score = nodes[0].get("retrieval_score", 0.0) if nodes else 0.0
-        avg_top3 = sum(n.get("retrieval_score", 0.0) for n in nodes[:3]) / max(1, len(nodes[:3]))
-
-        # Smooth scale: top score 60+ maps to 0.95, top score 20 maps to 0.50
-        raw_conf = min(0.95, max(0.35, (top_score * 0.7 + avg_top3 * 0.3) / 50.0))
+        # Dynamic confidence: scale based on retrieval quality
+        # top_score 80+ → confidence ~0.90, top_score 50 → ~0.60, top_score 30 → ~0.35
+        raw_conf = min(0.95, max(0.25, (top_score * 0.6 + avg_top3 * 0.4) / 85.0))
         confidence = round(raw_conf, 2)
 
         justification = (
             f"Retrieved {len(nodes)} relevant AST nodes; top seed match score is {top_score:.1f} "
-            f"with strong groundings in {nodes[0].get('file', 'codebase')}."
+            f"with groundings in {nodes[0].get('file', 'codebase')}."
         )
 
         return {

@@ -133,7 +133,7 @@ class SearchIndex:
         self,
         query: str,
         top_k: int = 20,
-        threshold: float = 50.0,
+        threshold: float = 70.0,
     ) -> list[dict[str, Any]]:
         """
         Fuzzy keyword/symbol search over node names and docstrings.
@@ -290,6 +290,11 @@ class SearchIndex:
                 reasons.append(data["keyword_reason"])
             if data["semantic_reason"]:
                 reasons.append(data["semantic_reason"])
+
+            # Minimum quality gate: discard results with very low fused scores
+            # This prevents irrelevant fuzzy matches from propagating
+            if fused < 15.0:
+                continue
 
             results.append({
                 "node": data["node"],
